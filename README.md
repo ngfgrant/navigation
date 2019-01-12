@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/ngfgrant/navigation/tree/master.svg?style=svg&circle-token=6bba4588eeb6ed5ebff6839646ce62293a1001d8)](https://circleci.com/gh/ngfgrant/navigation/tree/master)
+
 # Navigation
 
 This module provides units of measurement and associated functions required for
