@@ -67,3 +67,18 @@ jobs:
       - store_artifacts:
           path: coverage-reports
           destination: coverage-reports
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - lint-and-unit-test:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
