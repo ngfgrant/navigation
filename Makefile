@@ -14,13 +14,14 @@ coverage-all:
 		coverage erase
 		coverage run --source navigation -m unittest
 		coverage html
+		coverage xml
 
 coverage: coverage-all
 		coverage report --show-missing
 	    $(BROWSER) htmlcov/index.html
 
 test:
-		python -m unittest
+	    pytest --junitxml=test-reports/junit.xml
 	
 lint:
 	    flake8 .
