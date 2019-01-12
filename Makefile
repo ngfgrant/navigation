@@ -30,8 +30,9 @@ acceptance-test:
 	    behave acceptance-tests/
 
 sonar:
-	sonar-scanner \
-				-Dsonar.projectKey=navigation \
-				-Dsonar.sources=. \
-				-Dsonar.host.url=http://127.0.0.1:9000 \
-				-Dsonar.login=4256cabe75202d2ff2995309b8c748ce2f4ad2ba
+		sonar-scanner \
+				  -Dsonar.projectKey=ngfgrant_navigation \
+				  -Dsonar.organization=ngfgrant-github \
+				  -Dsonar.sources=. \
+				  -Dsonar.host.url=https://sonarcloud.io \
+				  -Dsonar.login=${sonar_login}
