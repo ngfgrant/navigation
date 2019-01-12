@@ -1,7 +1,7 @@
 # !/usr/bin/env python
 
 from navigation import __version__
-from distutils.core import setup, find_packages
+from setuptools import setup, find_packages
 
 
 with open("README.md") as readme_file:

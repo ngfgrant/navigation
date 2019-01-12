@@ -39,15 +39,12 @@ var/
 
 # Unit test / coverage reports
 htmlcov/
-.tox/
 .coverage
 .coverage.*
 .cache
-nosetests.xml
 coverage.xml
 *,cover
-.hypothesis/
-test-results.xml
+test-reports/*
 
 ### OSX ###
 *.DS_Store
