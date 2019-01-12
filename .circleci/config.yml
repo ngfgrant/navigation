@@ -2,23 +2,22 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.2
+      - image: ngfgrant/python-sonarqube:0.1
 
     steps:
       - checkout
-
       - run:
           name: Install Dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip3 install -r requirements.txt
 
       - run:
           name: Install Navigation
           command: |
             . venv/bin/activate
-            pip install .
+            pip3 install -e .
 
       - persist_to_workspace:
           root: /home/circleci
@@ -27,7 +26,7 @@ jobs:
 
   lint-and-unit-test:
     docker:
-      - image: circleci/python:3.6.2
+      - image: ngfgrant/python-sonarqube:0.1
 
     steps:
       - attach_workspace:
@@ -68,6 +67,20 @@ jobs:
           path: coverage.xml
           destination: coverage-reports
 
+  sonar:
+    docker:
+      - image: ngfgrant/python-sonarqube:0.1
+
+    steps:
+      - attach_workspace:
+          at: /home/circleci
+
+      - run:
+          name: Run Sonarqube
+          command: |
+            . venv/bin/activate
+            make sonar
+
 workflows:
   version: 2
   build-and-test:
@@ -82,3 +95,7 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - sonar:
+          requires:
+            - build
+            - lint-and-unit-test
