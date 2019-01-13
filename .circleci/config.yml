@@ -1,4 +1,53 @@
-version: 2
+version: 2.1
+
+workflows:
+  build-test-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+
+      - lint-and-unit-test:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+
+      - sonar:
+          requires:
+            - build
+            - lint-and-unit-test
+
+      - deploy-test:
+          requires:
+            - build
+            - lint-and-unit-test
+            - sonar
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+      - hold:
+          type: approval
+          requires:
+            - deploy-test
+
+      - deploy-production:
+          requires:
+            - build
+            - lint-and-unit-test
+            - sonar
+            - deploy-test
+            - hold
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+
 jobs:
   build:
     docker:
@@ -6,12 +55,21 @@ jobs:
 
     steps:
       - checkout
+
+      - restore_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
+
       - run:
           name: Install Dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
             pip3 install -r requirements.txt
+
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
+          paths:
+            - "venv"
 
       - run:
           name: Install Navigation
@@ -31,6 +89,23 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/circleci
+
+      - checkout
+
+      - restore_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
+
+      - run:
+          name: Install Dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip3 install -r requirements.txt
+
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
+          paths:
+            - "venv"
 
       - run:
           name: Linting
@@ -86,21 +161,79 @@ jobs:
             . venv/bin/activate
             make sonar
 
-workflows:
-  version: 2
-  build-and-test:
-    jobs:
-      - build:
-          filters:
-            tags:
-              only: /.*/
-      - lint-and-unit-test:
-          requires:
-            - build
-          filters:
-            tags:
-              only: /.*/
-      - sonar:
-          requires:
-            - build
-            - lint-and-unit-test
+  deploy-test:
+    docker:
+      - image: ngfgrant/python-sonarqube:0.1
+
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
+      - run:
+          name: Install Dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip3 install -r requirements.txt
+
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
+          paths:
+            - "venv"
+
+      - run:
+          name: Initialise .pypirc
+          command: |
+            echo -e "[test-pypi]" >> ~/.pypirc
+            echo -e "username = $PYPI_TEST_USER" >> ~/.pypirc
+            echo -e "password = $PYPI_TEST_PASSWORD" >> ~/.pypirc
+            echo -e "repository=https://test.pypi.org/legacy/" >> ~/.pypirc
+
+      - run:
+          name: Create Distribution
+          command: |
+            make dist
+
+      - run:
+          name: Upload to PyPi
+          command: |
+            . venv/bin/activate
+            twine upload -r test-pypi dist/*
+
+  deploy-production:
+    docker:
+      - image: ngfgrant/python-sonarqube:0.1
+
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
+      - run:
+          name: Install Dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip3 install -r requirements.txt
+
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
+          paths:
+            - "venv"
+
+      - run:
+          name: init .pypirc
+          command: |
+            echo -e "[pypi]" >> ~/.pypirc
+            echo -e "username = $PYPI_PROD_USER" >> ~/.pypirc
+            echo -e "password = $PYPI_PROD_PASSWORD" >> ~/.pypirc
+
+      - run:
+          name: Create Distribution
+          command: |
+            make dist
+
+      - run:
+          name: Upload to PyPi
+          command: |
+            . venv/bin/activate
+            twine upload -r pypi dist/*

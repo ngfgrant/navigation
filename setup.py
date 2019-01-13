@@ -1,4 +1,5 @@
 # !/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from navigation import __version__
 from setuptools import setup, find_packages
@@ -12,13 +13,12 @@ with open("CHANGELOG.md") as history_file:
 
 setup(
     name='pynavigation',
-    package=find_packages(
+    version=__version__,
+    packages=find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     package_dir={
         "navigation": "navigation"
     },
-    py_modules=["sceptre"],
-    version=__version__,
     description='A library that models units for navigation on Earth.',
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -42,4 +42,5 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Topic :: Navigation',
     ],
+    python_requires='>=3',
 )
