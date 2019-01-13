@@ -1,4 +1,15 @@
-[![CircleCI](https://circleci.com/gh/ngfgrant/navigation/tree/master.svg?style=svg&circle-token=6bba4588eeb6ed5ebff6839646ce62293a1001d8)](https://circleci.com/gh/ngfgrant/navigation/tree/master)
+[![CircleCI](https://circleci.com/gh/ngfgrant/navigation/tree/master.svg?style=svg&circle-token=6bba4588eeb6ed5ebff6839646ce62293a1001d8)](https://circleci.com/gh/ngfgrant/navigation/tree/master) [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=coverage)](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=coverage) [![Sonarcloud
+Status](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=ncloc)](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=ncloc)
+[![Sonarcloud
+Status](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=sqale_ratin)](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=sqale_rating)
+[![Sonarcloud
+Status](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=reliability_rating)](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=reliability_rating)
+[![Sonarcloud
+Status](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=security_rating)](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=security_rating)
+[![Sonarcloud
+Status](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=sqale_index)](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=sqale_index)
+[![Sonarcloud
+Status](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=vulnerabilities)](https://sonarcloud.io/api/project_badges/measure?project=ngfgrant_navigation&metric=vulnerabilities)
 
 # Navigation
 
