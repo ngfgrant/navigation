@@ -6,7 +6,9 @@ from math import asin
 from math import atan2
 from math import cos
 from math import pi
+from math import pow
 from math import sin
+from math import sqrt
 from math import radians
 
 
@@ -17,6 +19,7 @@ MULTIPLIER = {
 
 DEGREE_IN_MINUTES = Decimal(60)
 DEGREE_IN_SECONDS = Decimal(3600)
+EARTH_RADIUS_IN_NAUTICAL_MILES = Decimal(3443.9184665)
 EARTH_RADIUS_IN_KM = Decimal(6378.137)
 HALF_TURN = Decimal(180)
 ONE_TURN = Decimal(360)
@@ -211,6 +214,19 @@ class Waypoint(object):
             "latitude": self.latitude,
             "longitude": self._longitude
         }
+
+    @classmethod
+    def distance_between(self, wpt_a, wpt_b):
+        a = Decimal(
+            pow(sin((radians(wpt_a.latitude.as_decimal) -
+                     radians(wpt_b.latitude.as_decimal)) / 2), 2) +
+            cos(radians(wpt_a.latitude.as_decimal)) *
+            cos(radians(wpt_b.latitude.as_decimal)) *
+            pow(sin((radians(wpt_a.longitude.as_decimal) -
+                     radians(wpt_b.longitude.as_decimal))/2), 2)
+        )
+        c = Decimal(2 * atan2(sqrt(a), sqrt(1-a)))
+        return EARTH_RADIUS_IN_NAUTICAL_MILES * c
 
 
 class CompassBearing(object):
