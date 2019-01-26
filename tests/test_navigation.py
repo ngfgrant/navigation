@@ -60,6 +60,11 @@ class TestDistance(unittest.TestCase):
         self.assertIsInstance(distance, Distance)
         self.assertEqual(distance.in_nautical_miles, 0)
 
+    def test_distance_instantiates_with_less_than_one_greater_than_0(self):
+        distance = Distance(0.2)
+        self.assertIsInstance(distance, Distance)
+        self.assertEqual(distance.in_nautical_miles, 0.2)
+
     def test_distance_converts_to_km(self):
         distance = Distance(10)
         self.assertAlmostEqual(distance.in_km, Decimal(18.52))
