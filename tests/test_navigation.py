@@ -179,6 +179,18 @@ class TestWaypoint(unittest.TestCase):
         self.assertEqual(waypoint.waypoint, {
                          "latitude": latitude, "longitude": longitude})
 
+    def test_distance_between_two_waypoint(self):
+        latitude_a = Coordinate(56, 42, 10, "S")
+        longitude_a = Coordinate(2, 5, 19, "W")
+        latitude_b = Coordinate(56, 50, 10, "S")
+        longitude_b = Coordinate(2, 6, 19, "W")
+
+        wpt_a = Waypoint(latitude_a, longitude_a)
+        wpt_b = Waypoint(latitude_b, longitude_b)
+
+        distance = Waypoint.distance_between(wpt_a, wpt_b)
+        self.assertAlmostEqual(distance.quantize(Decimal('.001')), Decimal(8.033))
+
 
 class TestCompassBearing(unittest.TestCase):
     def test_compass_bearing_initailises_with_int(self):
