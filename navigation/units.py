@@ -215,7 +215,7 @@ class Waypoint(object):
 
 class CompassBearing(object):
     def __init__(self, bearing):
-        if not isinstance(bearing, int):
+        if not isinstance(bearing, int) or isinstance(bearing, Decimal):
             raise TypeError("Bearing must be an integer.")
 
         if bearing < 0 or bearing > ONE_TURN:
