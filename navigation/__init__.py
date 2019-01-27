@@ -5,7 +5,7 @@ import logging
 
 __author__ = 'Niall Grant'
 __email__ = 'ngfgrant@gmail.com'
-__version__ = '0.1.0alpha'
+__version__ = '0.1.0beta'
 
 
 # Set up logging to ``/dev/null`` like a library is supposed to.
