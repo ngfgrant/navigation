@@ -30,6 +30,10 @@ setcontext(decimal_context)
 
 
 class Time(object):
+    """
+    Represents a duration, defaults to seconds.
+    """
+
     def __init__(self, seconds):
         if not isinstance(seconds, int):
             raise TypeError(
@@ -55,6 +59,10 @@ class Time(object):
 
 
 class Distance(object):
+    """
+    Represents a distance, defaults to nautical miles.
+    """
+
     def __init__(self, nautical_miles):
         try:
             decimal_nm = Decimal(nautical_miles)
@@ -84,6 +92,10 @@ class Distance(object):
 
 
 class Speed(object):
+    """
+    Represents speed of travel, defaults to knots.
+    """
+
     def __init__(self, speed_in_knots):
         decimal_speed = Decimal(speed_in_knots)
 
@@ -110,6 +122,10 @@ class Speed(object):
 
 
 class Coordinate(object):
+    """
+    Represents a partial point on the surface of the earth, such as latitude or longitude.
+    """
+
     def __init__(self, degrees, minutes, seconds, compass):
         VALID_COMPASS = ["N", "E", "S", "W"]
         if not isinstance(degrees, int) and isinstance(minutes, int)\
@@ -192,6 +208,10 @@ class Coordinate(object):
 
 
 class Waypoint(object):
+    """
+    Represents a single point on the surface of the earth. Consists of two Coordinate.
+    """
+
     def __init__(self, latitude, longitude):
         if not isinstance(latitude, Coordinate) \
                 and isinstance(longitude, Coordinate):
@@ -234,6 +254,10 @@ class Waypoint(object):
 
 
 class CompassBearing(object):
+    """
+    Represents a heading on a compass rose.
+    """
+
     def __init__(self, bearing):
         if not isinstance(bearing, int) or isinstance(bearing, Decimal):
             raise TypeError("Bearing must be an integer.")
@@ -252,6 +276,11 @@ class CompassBearing(object):
 
 
 class SpeedDistanceTime(object):
+    """
+    Given partial Speed, Distance or Time information this object completes the
+    missing values to aid navigational calculations.
+    """
+
     def __init__(self, speed=None, distance=None, time=None):
         self._speed = None
         self._distance = None
@@ -317,6 +346,10 @@ class SpeedDistanceTime(object):
 
 
 class Leg(object):
+    """
+    Represents a course to travel. Has a single starting point and a single end point.
+    """
+
     def __init__(self, sdt, start_waypoint, bearing=None):
         self._sdt = None
         self._start_waypoint = None
@@ -433,6 +466,10 @@ class Leg(object):
 
 
 class Route(object):
+    """
+    Represents a series of legs that join between their start and end points.
+    """
+
     def __init__(self, legs=None):
 
         if not self._legs_is_valid(legs):
