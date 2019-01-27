@@ -157,6 +157,14 @@ class TestCoordinate(unittest.TestCase):
         self.assertAlmostEqual(coordinate.as_decimal,
                                Decimal(-10.755277777777778))
 
+    def test_returns_as_decimal_seconds(self):
+        coordinate = Coordinate(2, 46, 15, "W")
+        self.assertEqual(coordinate.as_decimal_seconds, (2, 46, .25, "W"))
+
+    def test_returns_as_decimal_seconds_zero_seconds(self):
+        coordinate = Coordinate(2, 46, 0, "W")
+        self.assertEqual(coordinate.as_decimal_seconds, (2, 46, 0, "W"))
+
 
 class TestWaypoint(unittest.TestCase):
     def test_waypoint_initailises_with_coordinates(self):

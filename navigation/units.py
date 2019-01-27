@@ -186,6 +186,10 @@ class Coordinate(object):
         else:
             return decimal
 
+    @property
+    def as_decimal_seconds(self):
+        return (self._degrees, self._minutes, (self._seconds/60), self._compass)
+
 
 class Waypoint(object):
     def __init__(self, latitude, longitude):
