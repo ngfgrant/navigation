@@ -35,6 +35,11 @@ class Time(object):
     """
 
     def __init__(self, seconds):
+        """
+
+        :param seconds: Seconds to instantiate Time object.
+        :type seconds: int Non-zero integer.
+        """
         if not isinstance(seconds, int):
             raise TypeError(
                 "Time must be given in seconds as an integer")
@@ -47,14 +52,27 @@ class Time(object):
 
     @property
     def in_seconds(self):
+        """
+        :return: The Time in seconds.
+        :rtype: Decimal
+        """
+
         return self._seconds
 
     @property
     def in_minutes(self):
+        """
+        :return: The Time in minutes.
+        :rtype: Decimal
+        """
         return Decimal(self._seconds / 60)
 
     @property
     def in_hours(self):
+        """
+        :return: The Time in hours.
+        :rtype: Decimal
+        """
         return Decimal((self._seconds / 60) / 60)
 
 
@@ -64,6 +82,9 @@ class Distance(object):
     """
 
     def __init__(self, nautical_miles):
+        """
+        :param nautical_miles: The distance in Nautical Miles.
+        """
         try:
             decimal_nm = Decimal(nautical_miles)
         except Exception as e:
@@ -80,14 +101,26 @@ class Distance(object):
 
     @property
     def in_nautical_miles(self):
+        """
+        :return: The Distance in Nautical Miles.
+        :rtype: Decimal
+        """
         return Decimal(self._nautical_miles)
 
     @property
     def in_km(self):
+        """
+        :return: The Distance in Kilometers.
+        :rtype: Decimal
+        """
         return Decimal(copy(self._nautical_miles) * MULTIPLIER.get("KM"))
 
     @property
     def in_miles(self):
+        """
+        :return: The Distance in Statute Miles.
+        :rtype: Decimal
+        """
         return Decimal(copy(self._nautical_miles) * MULTIPLIER.get("MILE"))
 
 
@@ -97,6 +130,9 @@ class Speed(object):
     """
 
     def __init__(self, speed_in_knots):
+        """
+        :param speed_in_knots: The speed to travel in Knots.
+        """
         decimal_speed = Decimal(speed_in_knots)
 
         if not isinstance(decimal_speed, Decimal):
@@ -110,14 +146,26 @@ class Speed(object):
 
     @property
     def in_knots(self):
+        """
+        :return: The speed in nautical miles per hour.
+        :rtype: Decimal
+        """
         return self._speed_in_knots
 
     @property
     def in_kmh(self):
+        """
+        :return: The speed in kilometers per hour.
+        :rtype: Decimal
+        """
         return Decimal(copy(self._speed_in_knots) * MULTIPLIER.get("KM"))
 
     @property
     def in_mph(self):
+        """
+        :return: The speed in miles per hour.
+        :rtype: Decimal
+        """
         return Decimal(copy(self._speed_in_knots) * MULTIPLIER.get("MILE"))
 
 
@@ -127,6 +175,19 @@ class Coordinate(object):
     """
 
     def __init__(self, degrees, minutes, seconds, compass):
+        """
+        :param degrees: The arc degree of the Coordinate.
+        :type degrees: int
+
+        :param minutes: The arc minutes of the Coordinate
+        :type minutes: int
+
+        :param seconds: The arc seconds of the Coordinate
+        :type seconds: int
+
+        :param compass: Give direction for latitude/longitude. Allowed values N, S, E, W.
+        :type compass: str
+        """
         VALID_COMPASS = ["N", "E", "S", "W"]
         if not isinstance(degrees, int) and isinstance(minutes, int)\
                 and isinstance(seconds, int):
@@ -145,6 +206,10 @@ class Coordinate(object):
 
     @classmethod
     def latitude_from_decimal(cls, decimal):
+        """
+        :param decimal: The decimal representation of latitude. E.g. 56.12345.
+        :return: The Coordinate in Degrees Minutes Seconds format.
+        """
         d = int(decimal)
         m = int((Decimal(decimal) - Decimal(d)) * DEGREE_IN_MINUTES)
         s = int((Decimal(decimal) - Decimal(d) - Decimal(m) /
@@ -158,6 +223,10 @@ class Coordinate(object):
 
     @classmethod
     def longitude_from_decimal(cls, decimal):
+        """
+        :param decimal: The decimal representation of latitude. E.g. -2.12345.
+        :return: The Coordinate in Degrees Minutes Seconds format.
+        """
         d = int(decimal)
         m = int((Decimal(decimal) - Decimal(d)) * DEGREE_IN_MINUTES)
         s = int((Decimal(decimal) - Decimal(d) - Decimal(m) /
@@ -171,26 +240,50 @@ class Coordinate(object):
 
     @property
     def degrees(self):
+        """
+        :return: The Degrees componenet of the Coordinate.
+        :rtype: Decimal
+        """
         return self._degrees
 
     @property
     def minutes(self):
+        """
+        :return: The Minutes componenet of the Coordinate.
+        :rtype: Decimal
+        """
         return self._minutes
 
     @property
     def seconds(self):
+        """
+        :return: The Seconds componenet of the Coordinate.
+        :rtype: Decimal
+        """
         return self._seconds
 
     @property
     def compass(self):
+        """
+        :return: The Compass direction componenet of the Coordinate. I.e. N/S E/W.
+        :rtype: str
+        """
         return self._compass
 
     @property
     def waypoint(self):
+        """
+        :return: The waypoint in Degrees, Minutes, Seconds, Compass format.
+        :rtype: tuple
+        """
         return (self._degrees, self._minutes, self._seconds, self._compass)
 
     @property
     def as_decimal(self):
+        """
+        :return: The Coordinate in decimal format. E.g. -2.6789.
+        :rtype: Decimal
+        """
         decimal = Decimal(
             abs(self._degrees) +
             (self._minutes / DEGREE_IN_MINUTES) +
@@ -204,15 +297,26 @@ class Coordinate(object):
 
     @property
     def as_decimal_seconds(self):
+        """
+        :return: The Coordinate in Degrees, Minutes, Decimal-Seconds format.
+        :rtype: tuple
+        """
         return (self._degrees, self._minutes, (self._seconds/60), self._compass)
 
 
 class Waypoint(object):
     """
-    Represents a single point on the surface of the earth. Consists of two Coordinate.
+    Represents a single point on the surface of the earth. Consists of two Coordinates.
     """
 
     def __init__(self, latitude, longitude):
+        """
+        :param latitude: The latitude of the Waypoint.
+        :type latitude: Coordinate
+
+        :param longitude: The longitude of the Waypoint.
+        :type longitude: Coordinate
+        """
         if not isinstance(latitude, Coordinate) \
                 and isinstance(longitude, Coordinate):
             raise TypeError("latitude and longitude must be Coordinates")
@@ -226,14 +330,26 @@ class Waypoint(object):
 
     @property
     def latitude(self):
+        """
+        :return: The latitude Coordinate.
+        :rtype: Coordinate
+        """
         return self._latitude
 
     @property
     def longitude(self):
+        """
+        :return: The longitude Coordinate.
+        :rtype: Coordinate
+        """
         return self._longitude
 
     @property
     def waypoint(self):
+        """
+        :return: The Waypoint containing the latitude and longitude Coordinates.
+        :rtype: dict
+        """
         return {
             "latitude": self.latitude,
             "longitude": self._longitude
@@ -241,6 +357,16 @@ class Waypoint(object):
 
     @classmethod
     def distance_between(self, wpt_a, wpt_b):
+        """
+        :param wpt_a: The Waypoint to measure from.
+        :type wpt_a: Waypoint
+
+        :param wpt_b: The Waypoint to measure to.
+        :type wpt_b: Waypoint
+
+        :return: The distance in Nautical Miles between Waypoint A and Waypoint B.
+        :rtype: Decimal
+        """
         a = Decimal(
             pow(sin((radians(wpt_a.latitude.as_decimal) -
                      radians(wpt_b.latitude.as_decimal)) / 2), 2) +
@@ -259,6 +385,10 @@ class CompassBearing(object):
     """
 
     def __init__(self, bearing):
+        """
+        :param bearing: The compass bearing to set. Must be between 0-360.
+        :type bearing: int
+        """
         if not isinstance(bearing, int) or isinstance(bearing, Decimal):
             raise TypeError("Bearing must be an integer.")
 
@@ -272,6 +402,10 @@ class CompassBearing(object):
 
     @property
     def bearing(self):
+        """
+        :return: The Compass Bearing.
+        :rtype: Decimal
+        """
         return Decimal(self._bearing)
 
 
@@ -282,6 +416,17 @@ class SpeedDistanceTime(object):
     """
 
     def __init__(self, speed=None, distance=None, time=None):
+        """
+        Must have two of the three parameters: Speed, Distance or Time.
+        The missing parameter is calculated.
+
+        :param speed: The Speed travelled at (optional)
+        :type speed: Speed
+        :param distance: The Distance to travel (optional)
+        :type distance: Distance
+        :param time: The time to travel (optional)
+        :type time: Time
+        """
         self._speed = None
         self._distance = None
         self._time = None
@@ -334,14 +479,26 @@ class SpeedDistanceTime(object):
 
     @property
     def speed(self):
+        """
+        :return: The speed to travel at.
+        :rtype: Speed
+        """
         return self._speed
 
     @property
     def distance(self):
+        """
+        :return: The distance to travel.
+        :rtype: Distance
+        """
         return self._distance
 
     @property
     def time(self):
+        """
+        :return: The time to travel for.
+        :rtype: Time
+        """
         return self._time
 
 
@@ -351,6 +508,16 @@ class Leg(object):
     """
 
     def __init__(self, sdt, start_waypoint, bearing=None):
+        """
+        :param sdt: The SpeedDistanceTime object for the Leg.
+        :type sdt: SpeedDistanceTime
+
+        :param start_waypoint: The starting Waypoint for the Leg.
+        :type start_waypoint: Waypoint
+
+        :param bearing: The bearing (direction) for the Leg (optional).
+        :type bearing: CompassBearing
+        """
         self._sdt = None
         self._start_waypoint = None
 
@@ -389,30 +556,58 @@ class Leg(object):
 
     @property
     def start_waypoint(self):
+        """
+        :return: The starting Waypoint.
+        :rtype: Waypoint
+        """
         return self._start_waypoint
 
     @property
     def end_waypoint(self):
+        """
+        :return: The end Waypoint.
+        :rtype: Waypoint
+        """
         return self._end_waypoint
 
     @property
     def bearing(self):
+        """
+        :return: The bearing of the Leg.
+        :rtype: CompassBearing
+        """
         return self._bearing
 
     @property
     def speed(self):
+        """
+        :return: The speed of the Leg.
+        :rtype: Speed
+        """
         return self._speed
 
     @property
     def distance(self):
+        """
+        :return: The distance of the Leg.
+        :rtype: Distance
+        """
         return self._distance
 
     @property
     def time(self):
+        """
+        :return: The time of the Leg.
+        :rtype: Time
+        """
         return self._time
 
     @property
     def reverse_bearing(self):
+        """
+        :return: The reciprocal bearing of the Leg.
+        :rtype: CompassBearing
+        """
         return CompassBearing(
             int(
                 (self._bearing.bearing + HALF_TURN) % ONE_TURN
@@ -471,7 +666,10 @@ class Route(object):
     """
 
     def __init__(self, legs=None):
-
+        """
+        :param legs: A list of Legs to form the Route.
+        :type legs: list
+        """
         if not self._legs_is_valid(legs):
             raise TypeError("Legs list must contain only Leg objects.")
         self._legs = legs
@@ -484,9 +682,19 @@ class Route(object):
 
     @property
     def legs(self):
+        """
+        :return: The list of Legs in the Route.
+        :rtype: list
+        """
         return self._legs
 
     def current_leg(self, current_leg_index):
+        """
+        :param current_leg_index: The position in the list of the Leg.
+        :type current_leg_index: int
+        :return: The leg at position current_leg_index.
+        :rtype: Leg
+        """
         try:
             return self._legs[current_leg_index]
         except IndexError:
@@ -494,6 +702,12 @@ class Route(object):
             raise
 
     def next_leg(self, current_leg_index):
+        """
+        :param current_leg_index: The position in the list of the Leg.
+        :type current_leg_index: int
+        :return: The next Leg after the Leg at current_leg_index.
+        :rtype: Leg
+        """
         try:
             return self._legs[current_leg_index + 1]
         except IndexError:
@@ -501,6 +715,12 @@ class Route(object):
             raise
 
     def previous_leg(self, current_leg_index):
+        """
+        :param current_leg_index: The position in the list of the Leg.
+        :type current_leg_index: int
+        :return: The Leg preceeding the Leg at current_leg_index.
+        :rtype: Leg
+        """
         try:
             return self._legs[current_leg_index - 1]
         except IndexError:
@@ -509,10 +729,18 @@ class Route(object):
 
     @property
     def number_of_legs(self):
+        """
+        :return: The number of Legs in the Route.
+        :rtype: int
+        """
         return len(self._legs)
 
     @property
     def start_waypoint(self):
+        """
+        :return: The starting Waypoint of the first Leg.
+        :rtype: Waypoint
+        """
         try:
             return self._legs[0].start_waypoint
         except IndexError:
@@ -521,6 +749,10 @@ class Route(object):
 
     @property
     def end_waypoint(self):
+        """
+        :return: The end Waypoint of the final Leg.
+        :rtype: Waypoint
+        """
         try:
             return self._legs[-1].end_waypoint
         except IndexError:
