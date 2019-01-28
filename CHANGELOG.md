@@ -4,6 +4,10 @@ Categories: Added, Removed, Changed, Fixed, Nonfunctional, Deprecated
 
 ## Unreleased
 
+### Non-functional
+
+- Add API Documentation
+
 ## 0.1.0beta (2019-01-27)
 
 ### Added
