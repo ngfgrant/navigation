@@ -20,19 +20,14 @@ RUN apk add --no-cache \
     python3 \
     python3-dev
 
-RUN pip3 install --upgrade pip setuptools
+RUN pip3 install --upgrade pip setuptools && pip3 install virtualenv
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
 ENV PATH $PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin
 
-RUN pip3 install virtualenv
-
-RUN curl https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip --output sonar.zip
-
-RUN unzip ./sonar.zip
-RUN rm ./sonar.zip
-
-RUN rm sonar-scanner-3.3.0.1492-linux/jre -rf &&\
+RUN curl https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip --output sonar.zip && \
+unzip ./sonar.zip && \
+rm ./sonar.zip && rm sonar-scanner-3.3.0.1492-linux/jre -rf && \
 sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' /home/circleci/sonar-scanner-3.3.0.1492-linux/bin/sonar-scanner
 
 ENV SONAR_RUNNER_HOME=/home/circleci/sonar-scanner-3.3.0.1492-linux
